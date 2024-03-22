@@ -1,6 +1,38 @@
 <script setup>
 console.log('test');
 import Header from '@/components/HeaderComponent.vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { supabase } from '../lib/supabase';
+
+const email = ref('');
+const password = ref('');
+const confpassword = ref('');
+
+const { push: routerPush } = useRouter();
+
+const onSubmit = async () => {
+    if (
+        password.value !== confpassword.value ||
+        !email.value ||
+        !password.value ||
+        !confpassword.value
+    ) {
+        alert('Passwords do not match');
+        return;
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+        email: email.value,
+        password: password.value
+    });
+    if (error) {
+        alert(error.message);
+    } else {
+        routerPush({ name: '' });
+    }
+    return data;
+};
 </script>
 
 <template>
@@ -9,7 +41,7 @@ import Header from '@/components/HeaderComponent.vue';
         <div class="flex justify-center items-center h-full">
             <div class="p-8 rounded-lg shadow-lg">
                 <h1 class="text-2xl justify-center font-bold mb-4">Create an account</h1>
-                <form>
+                <form @submit.prevent="onSubmit">
                     <div class="mb-4">
                         <label for="email" class="block text-sm font-medium text-text">Email</label>
                         <input
