@@ -1,8 +1,10 @@
 <script setup>
 console.log('test');
+import Header from '@/components/HeaderComponent.vue';
 </script>
 
 <template>
+    <Header />
     <div class="h-full bg-background">
         <div class="flex justify-center items-center h-full">
             <div class="p-8 rounded-lg shadow-lg">
