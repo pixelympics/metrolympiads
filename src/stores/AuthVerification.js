@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase';
 import { defineStore } from 'pinia';
 
 export const useCounterStore = defineStore('AuthVerification', () => {
