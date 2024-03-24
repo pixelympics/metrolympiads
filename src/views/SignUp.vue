@@ -3,7 +3,7 @@ console.log('test');
 import Header from '@/components/HeaderComponent.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase.js';
 
 const email = ref('');
 const password = ref('');
