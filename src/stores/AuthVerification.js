@@ -2,9 +2,9 @@ import { supabase } from '@/lib/supabaseClient';
 import { defineStore } from 'pinia';
 
 export const useCounterStore = defineStore('AuthVerification', () => {
-    const user = supabase.auth.user();
+    let user = supabase.auth.user();
     async function isAuthenticated() {
-        if(user=!null){
+        if (user != null) {
             return true;
         } else {
             user = await supabase.auth.user();
