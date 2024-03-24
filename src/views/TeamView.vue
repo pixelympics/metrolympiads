@@ -53,7 +53,7 @@ const deleteMember = (id) => {
                 <TestIcon />
             </button>
         </div>
-        <div class="mb-4">
+        <div class="mb-4" v-if="teamMembers.length < 4">
             <button
                 class="bg-indigo-500 text-white font-semibold p-2 rounded-md"
                 @click="addMember"
