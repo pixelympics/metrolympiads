@@ -1,4 +1,5 @@
 <script setup>
+import { storeToRefs } from 'pinia'
 import HeaderComponent from '@/components/HeaderComponent.vue';
 import { supabase } from '@/lib/supabase'
 import { ref } from 'vue';
@@ -8,7 +9,7 @@ const { user } = storeToRefs(useUserStore())
 
 MatchList = ref([])
 
-const matchList = async () => {
+const getMatchList = async () => {
     const { data, error } = await supabase
     .from('matchs')
     .select('*, teams:firstteam(team1, leader), teams:secondteam(team2, leader)')
@@ -21,7 +22,7 @@ const matchList = async () => {
   messageList.value = data.reverse()
 }
 
-MatchList = matchList
+MatchList = getMatchList()
 
 </script>
 
