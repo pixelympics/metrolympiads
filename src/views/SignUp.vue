@@ -88,5 +88,9 @@ const onSubmit = async () => {
                 :model-value="confpassword"
             />
         </AccountForm>
+
+        <a href="/login" class="m-2 mt-3 italic hover:text-primary">
+            You already have an account? Login here
+        </a>
     </div>
 </template>
