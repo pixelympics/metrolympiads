@@ -1,45 +1,48 @@
 <script setup>
-import { storeToRefs } from 'pinia'
 import HeaderComponent from '@/components/HeaderComponent.vue';
 import { supabase } from '@/lib/supabase'
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
 const { user } = storeToRefs(useUserStore())
 
 
 
 const MatchList = ref([])
 
-const getMatchList = async () => {
+async function getMatchList () {
     const { data, error } = await supabase
     .from('matchs')
-    .select('*, teams:firstteam(team1, leader), teams:secondteam(team2, leader)')
-    .where('')
-    .order('created_at', {ascending: false})
-    .limit(100)
+    .select('*, team1(name), team2(name)')
+
     if (error) {
-    console.error('Error fetching messages:', error)
+        console.error('Error fetching messages:', error)
     }
-  messageList.value = data.reverse()
+    MatchList.value = data
 }
 
-MatchList = getMatchList()
+onMounted(() => {
+    getMatchList()
+})
+
+{{ console.log(user.value.id) }}
 
 </script>
 
 <template>
     <header-component />
-
     <div class="flex flex-col items-center">
         <h1 class="text-3xl m-5">Welcome</h1>
 
         
+        <div v-for="(match) in MatchList" class="p-4" :key="match">
 
-        <div v-for="(id, firstteam, secondteam, sport, time, team1_score, team2_score) in MatchList" class="p-4" :key="id">
-
-            <div v-if="firstteam.leader == user.id || secondteam.leader == user.id">
-                {{ team1, team2, sport, time, team1_score, team2_score }}
-            </div>
-
+            
+            <!--
+                SLT VIC
+                match c'est l'element entier, si tu veux l'utiliser faut faire match.id ou match.score_team1 par exemple
+                jsp encore comment tu vas créer ton component donc je laisse ca ici
+            -->
             
         </div>
 

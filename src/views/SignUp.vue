@@ -1,6 +1,5 @@
 <script setup>
 console.log('test');
-import Header from '@/components/HeaderComponent.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { supabase } from '@/lib/supabase.js';
