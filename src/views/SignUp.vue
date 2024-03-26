@@ -1,6 +1,5 @@
 <script setup>
 console.log('test');
-import Header from '@/components/HeaderComponent.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { supabase } from '@/lib/supabase.js';
@@ -27,7 +26,7 @@ const onConfirmPasswordChange = (value) => {
 
 const onSubmit = async () => {
     if (
-        supabase.password.value !== confpassword.value ||
+        (await supabase.password.value) !== confpassword.value ||
         !email.value ||
         !password.value ||
         !confpassword.value
