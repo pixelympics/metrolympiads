@@ -5,7 +5,20 @@ import FormField from '@/components/FormField.vue';
 import TestIcon from '@/components/icons/IconTooling.vue';
 
 const team = ref('');
+const teamOnChange = (value) => {
+    team.value = value;
+};
+
+const firstmember = ref('');
+const firstMemberOnChange = (value) => {
+    firstmember.value = value;
+};
+
 const teamMembers = ref([]);
+const teamMembersOnChange = (value) => {
+    teamMembers.value = value;
+};
+
 let i = 1;
 
 const addMember = () => {
@@ -15,9 +28,15 @@ const addMember = () => {
 };
 
 const onSubmit = () => {
-    for (let j = 0; j < teamMembers.value.length; j++) {
-        console.log(teamMembers.value[j].name);
+    if (team.value === '') {
+        alert('Please enter a team name');
+        return;
     }
+    if (firstmember.value === '') {
+        alert('Please enter a first member');
+        return;
+    }
+    console.log(teamMembers.value);
 };
 
 const deleteMember = (id) => {
@@ -30,6 +49,7 @@ const deleteMember = (id) => {
     <div class="flex flex-col items-center justify-center gap-2">
         <h1 class="text-3xl m-5">Manage your team!</h1>
         <FormField
+            @update:value="teamOnChange"
             id="teamname"
             label="Team name :"
             name="teamname"
@@ -38,7 +58,13 @@ const deleteMember = (id) => {
             v-model="team"
         />
         <h1 class="text-3xl m-5">Team members</h1>
-        <FormField id="firstmember" name="firstmember" type="text" required />
+        <FormField
+            @update:value="firstMemberOnChange"
+            id="firstmember"
+            name="firstmember"
+            type="text"
+            required
+        />
         <div
             class="ml-12 flex align-items items-center space-x-2"
             v-for="member in teamMembers"
