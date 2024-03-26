@@ -50,7 +50,6 @@ const onSubmit = async () => {
 </script>
 
 <template>
-    <Header />
     <div class="m-5 flex flex-col items-center gap-2">
         <h1 class="text-2xl justify-center font-bold mb-4">Create an account</h1>
         <AccountForm
