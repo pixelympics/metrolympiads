@@ -10,7 +10,6 @@ import FormField from '@/components/FormField.vue';
 const email = ref('');
 const password = ref('');
 const confpassword = ref('');
-let emailExists = ref(false);
 
 const { push: routerPush } = useRouter();
 
