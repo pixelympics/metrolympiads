@@ -26,10 +26,15 @@ const onConfirmPasswordChange = (value) => {
 
 const onSubmit = async () => {
     if (
-        (await supabase.password) !== onPasswordChange ||
-        !onEmailChange ||
-        !onPasswordChange ||
-        !onConfirmPasswordChange
+        
+        email.value === '' ||
+        password.value === '' ||
+        confpassword.value === ''
+    ) {
+        alert('Please fill in all fields');
+        return;
+    }
+    if(password.value !== confpassword.value
     ) {
         alert('Passwords do not match');
         return;
