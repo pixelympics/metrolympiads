@@ -3,20 +3,16 @@ import { ref } from 'vue';
 import Header from '@/components/HeaderComponent.vue';
 import FormField from '@/components/FormField.vue';
 import TestIcon from '@/components/icons/IconTooling.vue';
+import { supabase } from '@/lib/supabase';
 
 const team = ref('');
 const teamOnChange = (value) => {
     team.value = value;
 };
 
-const firstmember = ref('');
-const firstMemberOnChange = (value) => {
-    firstmember.value = value;
-};
-
 const teamMembers = ref([]);
-const teamMembersOnChange = (value) => {
-    teamMembers.value = value;
+const teamMembersOnChange = (index, value) => {
+    teamMembers.value[index].name = value;
 };
 
 let i = 1;
@@ -27,16 +23,42 @@ const addMember = () => {
     console.log(teamMembers.value);
 };
 
-const onSubmit = () => {
+const onSubmit = async () => {
     if (team.value === '') {
         alert('Please enter a team name');
         return;
     }
-    if (firstmember.value === '') {
-        alert('Please enter a first member');
-        return;
+
+    // Collecte des noms des participants
+    const participantNames = teamMembers.value.map((member) => member.name);
+
+    console.log('Team Participants:', participantNames);
+
+    try {
+        const { data, error } = await supabase
+            .from('teams')
+            .update([
+                {
+                    name: team.value,
+                    members: participantNames
+                }
+            ])
+            .eq('leader', '88ac52af-ad16-4f3e-92a1-c3bda54e4190');
+
+        if (error) {
+            console.error('An error occurred:', error);
+            alert(
+                'An error occurred while updating the team. Please check the console for more details.'
+            );
+        } else {
+            alert('Team created!');
+        }
+    } catch (error) {
+        console.error('An unexpected error occurred:', error);
+        alert(
+            'An unexpected error occurred while updating the team. Please check the console for more details.'
+        );
     }
-    console.log(teamMembers.value);
 };
 
 const deleteMember = (id) => {
@@ -58,22 +80,16 @@ const deleteMember = (id) => {
             v-model="team"
         />
         <h1 class="text-3xl m-5">Team members</h1>
-        <FormField
-            @update:value="firstMemberOnChange"
-            id="firstmember"
-            name="firstmember"
-            type="text"
-            required
-        />
         <div
             class="ml-12 flex align-items items-center space-x-2"
-            v-for="member in teamMembers"
+            v-for="(member, index) in teamMembers"
             :key="member.id"
         >
             <FormField
+                @update:value="(value) => teamMembersOnChange(index, value)"
                 :id="member.id"
                 :name="`member-${member.id}`"
-                :value="member.modelValue"
+                v-model="member.name"
                 type="text"
                 required
             />
@@ -84,7 +100,7 @@ const deleteMember = (id) => {
                 <TestIcon />
             </button>
         </div>
-        <div class="mb-4" v-if="teamMembers.length < 4">
+        <div class="mb-4" v-if="teamMembers.length < 5">
             <button
                 class="bg-indigo-500 text-white font-semibold p-2 rounded-md"
                 @click="addMember"
@@ -92,7 +108,7 @@ const deleteMember = (id) => {
                 Add a member
             </button>
         </div>
-        <div class="justify-center">
+        <div v-if="teamMembers.length > 0" class="justify-center">
             <button class="bg-indigo-500 text-white font-semibold p-2 rounded-md" @click="onSubmit">
                 Validate team ✓
             </button>
