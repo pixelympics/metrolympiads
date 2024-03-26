@@ -7,7 +7,7 @@ const { user } = storeToRefs(useUserStore())
 
 
 
-MatchList = ref([])
+const MatchList = ref([])
 
 const getMatchList = async () => {
     const { data, error } = await supabase
