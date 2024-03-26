@@ -14,6 +14,12 @@ const addMember = () => {
     console.log(teamMembers.value);
 };
 
+const onSubmit = () => {
+    for (let j = 0; j < teamMembers.value.length; j++) {
+        console.log(teamMembers.value[j].name);
+    }
+};
+
 const deleteMember = (id) => {
     teamMembers.value = teamMembers.value.filter((member) => member.id !== id);
 };
@@ -22,7 +28,7 @@ const deleteMember = (id) => {
 <template>
     <Header />
     <div class="flex flex-col items-center justify-center gap-2">
-        <h1 class="text-3xl m-5">Create your team!</h1>
+        <h1 class="text-3xl m-5">Manage your team!</h1>
         <FormField
             id="teamname"
             label="Team name :"
@@ -34,7 +40,7 @@ const deleteMember = (id) => {
         <h1 class="text-3xl m-5">Team members</h1>
         <FormField id="firstmember" name="firstmember" type="text" required />
         <div
-            class="flex align-items items-center space-x-2"
+            class="ml-12 flex align-items items-center space-x-2"
             v-for="member in teamMembers"
             :key="member.id"
         >
@@ -59,14 +65,11 @@ const deleteMember = (id) => {
             >
                 Add a member
             </button>
-            <div class="justify-center">
-                <button
-                    class="bg-indigo-500 text-white font-semibold p-2 rounded-md"
-                    @click="console.log(teamMembers)"
-                >
-                    Validate team ✓
-                </button>
-            </div>
+        </div>
+        <div class="justify-center">
+            <button class="bg-indigo-500 text-white font-semibold p-2 rounded-md" @click="onSubmit">
+                Validate team ✓
+            </button>
         </div>
     </div>
 </template>
