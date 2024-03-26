@@ -26,7 +26,7 @@ const onConfirmPasswordChange = (value) => {
 
 const onSubmit = async () => {
     if (
-        (await supabase.password.value) !== onPasswordChange ||
+        (await supabase.password) !== onPasswordChange ||
         !onEmailChange ||
         !onPasswordChange ||
         !onConfirmPasswordChange
