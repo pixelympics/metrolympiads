@@ -1,16 +1,15 @@
 <script setup>
 import { ref } from 'vue';
-import { supabase } from '@/lib/supabase';
 import Header from '@/components/HeaderComponent.vue';
 import FormField from '@/components/FormField.vue';
-import TestIcon from '@/components/icons/IconCommunity.vue';
+import TestIcon from '@/components/icons/IconTooling.vue';
 
 const team = ref('');
 const teamMembers = ref([]);
-let i = 0;
+let i = 1;
 
 const addMember = () => {
-    teamMembers.value.push({ id: i, name: '', value: '' });
+    teamMembers.value.push({ id: i, name: '', modelValue: '' });
     i++;
     console.log(teamMembers.value);
 };
@@ -22,8 +21,8 @@ const deleteMember = (id) => {
 
 <template>
     <Header />
-    <div class="flex flex-col items-center gap-2">
-        <h1 class="text-3xl m-5">Create your team !</h1>
+    <div class="flex flex-col items-center justify-center gap-2">
+        <h1 class="text-3xl m-5">Create your team!</h1>
         <FormField
             id="teamname"
             label="Team name :"
@@ -42,9 +41,9 @@ const deleteMember = (id) => {
             <FormField
                 :id="member.id"
                 :name="`member-${member.id}`"
+                :value="member.modelValue"
                 type="text"
                 required
-                v-model="member.name"
             />
             <button
                 class="bg-gray-500 text-white font-semibold p-2 rounded-md"
@@ -60,6 +59,14 @@ const deleteMember = (id) => {
             >
                 Add a member
             </button>
+            <div class="justify-center">
+                <button
+                    class="bg-indigo-500 text-white font-semibold p-2 rounded-md"
+                    @click="console.log(teamMembers)"
+                >
+                    Validate team ✓
+                </button>
+            </div>
         </div>
     </div>
 </template>
