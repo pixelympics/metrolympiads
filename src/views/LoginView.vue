@@ -65,5 +65,13 @@ const onPasswordChange = (value) => {
                 :model-value="password"
             />
         </account-form>
+
+        <a href="/signup" class="m-2 mt-3 italic hover:text-primary">
+            You don't have an account yet? Create one now!
+        </a>
+
+        <a href="#" class="bg-indigo-500 text-white text-xl font-semibold m-2 mt-4 p-2 rounded-md">
+            Guest access
+        </a>
     </div>
 </template>

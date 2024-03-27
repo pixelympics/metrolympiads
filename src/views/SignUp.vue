@@ -26,10 +26,15 @@ const onConfirmPasswordChange = (value) => {
 
 const onSubmit = async () => {
     if (
-        supabase.password.value !== confpassword.value ||
-        !email.value ||
-        !password.value ||
-        !confpassword.value
+        
+        email.value === '' ||
+        password.value === '' ||
+        confpassword.value === ''
+    ) {
+        alert('Please fill in all fields');
+        return;
+    }
+    if(password.value !== confpassword.value
     ) {
         alert('Passwords do not match');
         return;
@@ -87,5 +92,9 @@ const onSubmit = async () => {
                 :model-value="confpassword"
             />
         </AccountForm>
+
+        <a href="/login" class="m-2 mt-3 italic hover:text-primary">
+            You already have an account? Login here
+        </a>
     </div>
 </template>
