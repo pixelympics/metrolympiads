@@ -1,10 +1,13 @@
 <script setup>
 import HeaderComponent from '@/components/HeaderComponent.vue';
+import MatchItem from '@/components/MatchItem.vue';
 import { supabase } from '@/lib/supabase'
 import { onMounted, ref } from 'vue';
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 const { user } = storeToRefs(useUserStore())
+
+
 
 const MatchList = ref([])
 
@@ -23,6 +26,7 @@ onMounted(() => {
     getMatchList()
 })
 
+
 </script>
 
 <template>
@@ -30,21 +34,22 @@ onMounted(() => {
     <div class="flex flex-col items-center">
         <h1 class="text-3xl m-5">Welcome</h1>
 
-        {{ user.id }}
-        
-        <div v-for="(match) in MatchList" class="p-4" :key="match">
+        <table  class="table-auto">
+            <thead>
+                    <tr>
+                        <th></th>
+                        <th class="px-4 py-2">Team 1</th>
+                        <th class="px-4 py-2">Team 2</th>
+                        <th class="px-4 py-2">Score</th>
+                    </tr>
+                </thead>
+            <tbody>
+                <div v-for="(match) in MatchList" class="p-4" :key="match">
 
-            <div v-if="user.id === match.team1.leader || user.id === match.team1.leader">
-                {{ match.team2.name }}
-            </div>
-
-            <!--
-                SLT VIC
-                match c'est l'element entier, si tu veux l'utiliser faut faire match.id ou match.score_team1 par exemple
-                jsp encore comment tu vas créer ton component donc je laisse ca ici
-            -->
-            
-        </div>
-
+                    <MatchItem match="match"/>
+                
+                </div>
+            </tbody>
+        </table>
     </div>
 </template>
