@@ -12,7 +12,7 @@ export const useUserStore = defineStore('user', () => {
         return
       }
   
-      const { data, error } = await supabase.from('users').select('*').eq('id', userId).single()
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single()
   
       if (error) {
         console.error('Error fetching user profile:', error)
