@@ -4,7 +4,10 @@ import Header from '@/components/HeaderComponent.vue';
 import FormField from '@/components/FormField.vue';
 import TestIcon from '@/components/icons/IconTooling.vue';
 import { supabase } from '@/lib/supabase';
-
+import { useUserStore } from '@/stores/user';
+import { storeToRefs } from 'pinia';
+const { user } = storeToRefs(useUserStore());
+console.log('User : ' + user.id);
 const team = ref('');
 const teamOnChange = (value) => {
     team.value = value;
@@ -23,7 +26,7 @@ const addMember = () => {
     console.log(teamMembers.value);
 };
 
-const onSubmit = async () => {
+const onSubmit = async (id) => {
     if (team.value === '') {
         alert('Please enter a team name');
         return;
@@ -43,7 +46,7 @@ const onSubmit = async () => {
                     members: participantNames
                 }
             ])
-            .eq('leader', '88ac52af-ad16-4f3e-92a1-c3bda54e4190');
+            .eq('leader', id);
 
         if (error) {
             console.error('An error occurred:', error);
@@ -52,6 +55,7 @@ const onSubmit = async () => {
             );
         } else {
             alert('Team created!');
+            return data;
         }
     } catch (error) {
         console.error('An unexpected error occurred:', error);
@@ -109,7 +113,10 @@ const deleteMember = (id) => {
             </button>
         </div>
         <div v-if="teamMembers.length > 0" class="justify-center">
-            <button class="bg-indigo-500 text-white font-semibold p-2 rounded-md" @click="onSubmit">
+            <button
+                class="bg-indigo-500 text-white font-semibold p-2 rounded-md"
+                @click="onSubmit(user.id)"
+            >
                 Validate team ✓
             </button>
         </div>
