@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LoginView from '@/views/LoginView.vue';
 import SignUp from '@/views/SignUp.vue';
 import { supabase } from '@/lib/supabase';
-import MatchesView from '@/views/MatchesView.vue';
+import MatchsView from '@/views/MatchsView.vue';
 
 const isLoggedIn = async () => {
     const { data } = await supabase.auth.getSession();
@@ -43,7 +43,7 @@ const router = createRouter({
         {
             path: '/team-dashboard',
             name: 'team-dashboard',
-            component: MatchesView,
+            component: MatchsView,
             meta: { requiresAuth: true }
         },
         {

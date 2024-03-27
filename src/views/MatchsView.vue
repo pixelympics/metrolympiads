@@ -6,8 +6,6 @@ import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 const { user } = storeToRefs(useUserStore())
 
-
-
 const MatchList = ref([])
 
 async function getMatchList () {
@@ -25,8 +23,6 @@ onMounted(() => {
     getMatchList()
 })
 
-{{ console.log(user.value.id) }}
-
 </script>
 
 <template>
@@ -34,10 +30,14 @@ onMounted(() => {
     <div class="flex flex-col items-center">
         <h1 class="text-3xl m-5">Welcome</h1>
 
+        {{ user.id }}
         
         <div v-for="(match) in MatchList" class="p-4" :key="match">
 
-            
+            <div v-if="user.id === match.team1.leader || user.id === match.team1.leader">
+                {{ match.team2.name }}
+            </div>
+
             <!--
                 SLT VIC
                 match c'est l'element entier, si tu veux l'utiliser faut faire match.id ou match.score_team1 par exemple
