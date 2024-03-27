@@ -1,13 +1,30 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import Header from '@/components/HeaderComponent.vue';
 import FormField from '@/components/FormField.vue';
 import TestIcon from '@/components/icons/IconTooling.vue';
 import { supabase } from '@/lib/supabase';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
+import router from '@/router';
 const { user } = storeToRefs(useUserStore());
-console.log('User : ' + user.id);
+
+watch(user, async () => {
+    const datas = await getDatasFromLeader(user.value?.id);
+    if (datas[0].members !== null && teamMembers.value.length < 5) {
+        datas[0].members.forEach((member) => {
+            teamMembers.value.push({ id: i, name: member, modelValue: '' });
+            i++;
+        });
+    }
+    team.value = datas[0].name;
+});
+
+async function getDatasFromLeader(id) {
+    const { data } = await supabase.from('teams').select('*').eq('leader', id);
+    return data;
+}
+
 const team = ref('');
 const teamOnChange = (value) => {
     team.value = value;
@@ -23,7 +40,6 @@ let i = 1;
 const addMember = () => {
     teamMembers.value.push({ id: i, name: '', modelValue: '' });
     i++;
-    console.log(teamMembers.value);
 };
 
 const onSubmit = async (id) => {
@@ -34,8 +50,6 @@ const onSubmit = async (id) => {
 
     // Collecte des noms des participants
     const participantNames = teamMembers.value.map((member) => member.name);
-
-    console.log('Team Participants:', participantNames);
 
     try {
         const { data, error } = await supabase
@@ -55,6 +69,7 @@ const onSubmit = async (id) => {
             );
         } else {
             alert('Team created!');
+            router.push('/login');
             return data;
         }
     } catch (error) {
