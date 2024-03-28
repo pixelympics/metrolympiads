@@ -15,7 +15,7 @@ const goToTeamDashboard = function () {
 };
 
 const goToRanking = function () {
-    routerPush('/ranking');
+    routerPush('/rankings');
 };
 
 const goToMatchs = function () {
@@ -67,11 +67,6 @@ const unloggedMenu = ref([
         action: goToSignup,
     },])
 const AlwaysMenu = ref([
-    {
-        name: 'Home',
-        icon: 'home',
-        action: goToTeamDashboard
-    },
     {
         name: 'Ranking',
         icon: 'chart-line',
@@ -162,7 +157,6 @@ onMounted(async () => {
     v-model:miniMenu="collapsed"
     closeOnClickOutSide
     dark
-    BottomMiniMenuBtn="false"
     @item-click="( (item) => {
         if (item.action) {
             item.action();
