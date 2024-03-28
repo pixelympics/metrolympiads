@@ -1,5 +1,4 @@
 <script setup>
-//const props =
 defineProps({
     id: String,
     submitButtonText: String,
@@ -10,7 +9,7 @@ const emit = defineEmits(['submit']);
 </script>
 
 <template>
-    <div class="h-full bg-background">
+    <div class="m-1 h-full bg-background max-w-[300px]">
         <div class="flex justify-center items-center h-full">
             <div class="p-8 rounded-lg shadow-lg">
                 <h1 class="text-2xl justify-center font-bold mb-4">{{ caption }}</h1>

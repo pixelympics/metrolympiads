@@ -41,7 +41,7 @@ const onPasswordChange = (value) => {
         <h1 class="text-3xl m-5">METROLYMPIADES</h1>
         <account-form
             @submit="onSubmit"
-            id="login - form"
+            id="login-form"
             submit-button-text="Get me in"
             caption="Login"
         >

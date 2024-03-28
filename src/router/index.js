@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase';
 import TeamView from '@/views/TeamView.vue';
 //import MatchsView from '@/views/MatchsView.vue';
 import Scoreboard from '@/views/ScoreboardView.vue';
+import CreateMatchView from '@/views/CreateMatchView.vue';
 
 const isLoggedIn = async () => {
     const { data } = await supabase.auth.getSession();
@@ -51,6 +52,12 @@ const router = createRouter({
             path: '/team-dashboard',
             name: 'team-dashboard',
             component: TeamView,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/create-match',
+            name: 'create-match',
+            component: CreateMatchView,
             meta: { requiresAuth: true }
         },
         {
