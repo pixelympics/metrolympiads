@@ -5,8 +5,9 @@ import { onMounted, ref } from 'vue';
 
 
 
-const MatchList = ref([]);
-const leaderboard = ref([]);
+let MatchList = [];
+let leaderboard = [];
+let keys = [];
 
 async function getMatchList () {
     const { data, error } = await supabase
@@ -16,45 +17,53 @@ async function getMatchList () {
     if (error) {
         console.error('Error fetching messages:', error)
     }
-    MatchList.value = data
+    MatchList = data
 }
 
 function getLeaderBoard(listeMatch){
 
+    console.log("a")
+    console.log(listeMatch)
 
-    let scores;
-    console.log(listeMatch.value)
-    console.log([])
+    let scores = [];
+    console.log("b")
+    console.log(listeMatch.length)
 
-    for(let i = 0; i < typeof(listeMatch.value.length); i++){
-        if(!scores[listeMatch.value[i].team1.name]){
-            console.log(scores)
-            scores[listeMatch.value[i].team1.name] = 0;
+    for(let i = 0; i < listeMatch.length; i++){
+
+        if(!scores[listeMatch[i].team1.name]){
+            scores[listeMatch[i].team1.name] = 0;
         }
-        if(!scores[listeMatch.value[i].team2.name]){
-            console.log(scores)
-            scores[listeMatch.value[i].team2.name] = 0;
+        if(!scores[listeMatch[i].team2.name]){
+            scores[listeMatch[i].team2.name] = 0;
         }
 
-        if(listeMatch.value[i].team1_score > listeMatch.value[i].team2_score){
-            scores[listeMatch.value[i].team1.name] += 3;
+        if(listeMatch[i].team1_score > listeMatch[i].team2_score){
+            scores[listeMatch[i].team1.name] += 3;
         }
-        if(listeMatch.value[i].team1_score < listeMatch.value[i].team2_score){
-            scores[listeMatch.value[i].team2.name] += 3;
+        if(listeMatch[i].team1_score < listeMatch[i].team2_score){
+            scores[listeMatch[i].team2.name] += 3;
         }
-        if(listeMatch.value[i].team1_score == listeMatch.value[i].team2_score){
-            scores[listeMatch.value[i].team1.name] += 1;
-            scores[listeMatch.value[i].team2.name] += 1;
+        if(listeMatch[i].team1_score == listeMatch[i].team2_score){
+            scores[listeMatch[i].team1.name] += 1;
+            scores[listeMatch[i].team2.name] += 1;
         }
+        console.log(i)
+        console.log(scores)
 
     }
-    leaderboard.value = scores;
+    console.log(scores)
+    leaderboard = scores
 }
 
 onMounted(async () => {
     await getMatchList()
+    console.log(MatchList)
     getLeaderBoard(MatchList)
-    console.log(leaderboard)
+    console.log("leaderboard :")
+    keys = Object.keys(leaderboard)
+    console.log("keys :")
+    console.log(keys)
 })
 
 
@@ -69,21 +78,22 @@ onMounted(async () => {
         <table  class="table-auto">
             <thead>
                     <tr>
-                        <th></th>
                         <th class="px-4 py-2">Team name</th>
                         <th class="px-4 py-2">Points</th>
                     </tr>
                 </thead>
 
-                {{ leaderboard }}
+                
 
             <tbody>
-                <!-- <div v-for="(teams) in leaderboard.keys()" class="p-4" :key="teams">
+                <tr v-for="key in keys" class="p-4" :key="key">
 
-                    {{ teams }}
-                    {{ leaderboard[teams] }}
+
+                    <td class="px-4 py-2">{{ key }}</td>
+                    <td class="px-4 py-2">{{ leaderboard[key] }}</td>
                 
-                </div> -->
+                </tr>
+                
             </tbody>
         </table>
     </div>
