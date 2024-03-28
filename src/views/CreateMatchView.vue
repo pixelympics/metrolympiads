@@ -3,86 +3,170 @@ import AccountForm from '@/components/AccountForm.vue';
 import FormField from '@/components/FormField.vue';
 import HeaderComponent from '@/components/HeaderComponent.vue';
 import FormSelect from '@/components/FormSelect.vue';
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import { supabase } from '@/lib/supabase';
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/user';
 
-const teamName = ref('Hello World');
+const { user } = storeToRefs(useUserStore());
+
+const userTeamId = ref('');
+const userTeamName = ref('');
 const opponentName = ref('opponent');
 
-const date = ref('');
+const time = ref('');
 
-const teams = ref(['Team 1', 'Team 2', 'Team 3', 'Team 4', 'Team 5']);
-const selectedTeamIndex = ref('-1');
+const teams = ref([]);
+const teamNames = ref([]);
+const selectedTeamIndex = ref('');
 
-const sports = ref(['Soccer', 'Basketball', 'Volleyball', 'Tennis', 'Baseball']);
-const selectedSportIndex = ref('-1');
+const sport = ref('');
 
-const yourScore = ref('0');
+const userTeamScore = ref('0');
 const opponentScore = ref('0');
+
+const fetchTeams = async (userId) => {
+    await fetchUserTeam(userId);
+    await fetchOtherTeams(userId);
+};
+
+const fetchUserTeam = async (userId) => {
+    if (!userId) {
+        return;
+    }
+
+    const { data, error } = await supabase
+        .from('teams')
+        .select('id, name')
+        .eq('leader', userId)
+        .single();
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    console.log(data);
+
+    userTeamName.value = data.name;
+    userTeamId.value = data.id;
+};
+
+const fetchOtherTeams = async (userId) => {
+    if (!userId) {
+        return;
+    }
+
+    const { data, error } = await supabase.from('teams').select('id, name').neq('leader', userId);
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    teams.value = data;
+    teamNames.value = data.map((team) => team.name);
+};
 
 watch(selectedTeamIndex, (newValue) => {
     opponentName.value = 'opponent';
-    if (newValue !== '-1') {
-        opponentName.value = teams.value[newValue];
+    if (newValue !== '') {
+        opponentName.value = teamNames.value[newValue];
     }
 });
 
-const onSubmit = () => {
-    console.log('submit');
+const onSubmit = async () => {
+    if (!user.value) {
+        return;
+    }
+
+    console.table(teams.value);
+
+    const { error } = await supabase.from('matchs').insert([
+        {
+            team1: userTeamId.value,
+            team2: teams.value[selectedTeamIndex.value].id,
+            sport: sport.value,
+            time: time.value,
+            team1_score: userTeamScore.value,
+            team2_score: opponentScore.value
+        }
+    ]);
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    //TODO redirect to matchs list
+    alert('Match created');
 };
+
+onMounted(async () => {
+    if (!user.value) {
+        return;
+    }
+    fetchTeams(user.value.id);
+});
+
+watch(user, (newValue) => {
+    if (!newValue) {
+        return;
+    }
+    fetchTeams(newValue.id);
+});
 </script>
 
 <template>
     <HeaderComponent />
     <div class="flex flex-col items-center">
         <h1 class="text-3xl m-5">Matchs</h1>
-        <AccountForm caption="" submit-button-text="Create match" @submit="onSubmit">
+        <AccountForm submit-button-text="Create match" @submit="onSubmit">
             <FormField
-                id="your-team"
-                label="Your Team"
-                name="your-team"
+                id="user-team"
+                label="Your team"
+                name="user-team"
                 type="text"
-                :model-value="teamName"
+                :model-value="userTeamName"
                 read-only
             />
             <FormSelect
-                id="team-select"
+                id="team"
                 label="Team"
                 name="team"
                 required
-                :list="teams"
+                :list="teamNames"
                 :selected="selectedTeamIndex"
                 placeholder="Select a team"
                 @update:value="(value) => (selectedTeamIndex = value)"
             />
-            <FormSelect
-                id="sport-select"
+            <FormField
+                id="sport"
                 label="Sport"
                 name="sport"
                 required
-                :list="sports"
-                :selected="selectedSportIndex"
-                placeholder="Select a sport"
-                @update:value="(value) => (selectedSportIndex = value)"
+                :model-value="sport"
+                @update:value="(value) => (sport = value)"
             />
             <FormField
-                id="time-field"
+                id="time"
                 label="Time"
                 name="time"
                 type="time"
                 required
-                :model-value="date"
-                @update:value="(value) => (date = value)"
+                :model-value="time"
+                @update:value="(value) => (time = value)"
             />
 
             <div class="flex gap-5">
                 <FormField
-                    id="your-score"
-                    :label="teamName"
-                    name="your-score"
+                    id="user-score"
+                    :label="userTeamName"
+                    name="user-score"
                     type="number"
                     required
-                    :model-value="yourScore"
-                    @update:value="(value) => (yourScore = value)"
+                    :model-value="userTeamScore"
+                    @update:value="(value) => (userTeamScore = value)"
                 />
                 <FormField
                     id="opponent-score"
