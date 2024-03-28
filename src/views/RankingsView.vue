@@ -1,7 +1,7 @@
 <script setup>
-
 import { ref, onMounted } from 'vue'
 import { supabase } from '@/lib/supabase'
+import HeaderComponent from '@/components/HeaderComponent.vue'
 const scores = ref([])
 
 
@@ -21,6 +21,7 @@ onMounted(async () => {
 
 
 <template>
+    <HeaderComponent />
     <table class="table-auto">
         <thead>
             <tr>
