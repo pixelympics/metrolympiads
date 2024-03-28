@@ -3,6 +3,7 @@ import LoginView from '@/views/LoginView.vue';
 import SignUp from '@/views/SignUp.vue';
 import { supabase } from '@/lib/supabase';
 import MatchsView from '@/views/MatchsView.vue';
+import Scoreboard from '@/views/ScoreboardView.vue';
 
 const isLoggedIn = async () => {
     const { data } = await supabase.auth.getSession();
@@ -22,6 +23,11 @@ const router = createRouter({
                 }
                 next({ name: 'login' });
             }
+        },
+        {
+            path:'/scoreboard',
+            name: 'scoreboard',
+            component: Scoreboard
         },
         {
             path: '/login',

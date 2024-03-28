@@ -23,6 +23,7 @@ async function logout() {
 <template Header>
     <Slide>
         <span v-on:click="router.push('/')">Home</span>
+        <button @click="router.push('/scoreboard')">scoreboard</button>
         <button :loading="loading" @click="logout">
             <span v-if="loading">...</span>
             <span v-else>Logout</span>
