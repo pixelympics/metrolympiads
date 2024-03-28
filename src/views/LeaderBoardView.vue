@@ -5,9 +5,9 @@ import { onMounted, ref } from 'vue';
 
 
 
-let MatchList = [];
-let leaderboard = [];
-let keys = [];
+const MatchList = ref([]);
+const leaderboard = ref([]);
+let keys = ref([]);
 
 async function getMatchList () {
     const { data, error } = await supabase
@@ -17,7 +17,7 @@ async function getMatchList () {
     if (error) {
         console.error('Error fetching messages:', error)
     }
-    MatchList = data
+    MatchList.value = data
 }
 
 function getLeaderBoard(listeMatch){
@@ -48,23 +48,19 @@ function getLeaderBoard(listeMatch){
             scores[listeMatch[i].team1.name] += 1;
             scores[listeMatch[i].team2.name] += 1;
         }
-        console.log(i)
-        console.log(scores)
 
     }
-    console.log(scores)
-    leaderboard = scores
+
+
+    leaderboard.value = scores
 }
 
 onMounted(async () => {
     await getMatchList()
-    console.log(MatchList)
-    getLeaderBoard(MatchList)
-    console.log("leaderboard :")
-    keys = Object.keys(leaderboard)
-    console.log("keys :")
-    console.log(keys)
+    getLeaderBoard(MatchList.value)
+    keys.value = Object.keys(leaderboard.value)
 })
+
 
 
 
@@ -83,11 +79,8 @@ onMounted(async () => {
                     </tr>
                 </thead>
 
-                
-
             <tbody>
-                <tr v-for="key in keys" class="p-4" :key="key">
-
+                <tr v-for="key in keys.sort()" class="p-4" :key="key">
 
                     <td class="px-4 py-2">{{ key }}</td>
                     <td class="px-4 py-2">{{ leaderboard[key] }}</td>
