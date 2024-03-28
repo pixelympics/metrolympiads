@@ -43,27 +43,23 @@ const loggedInMenu = ref([
     {
         name: 'Team settings',
         icon: 'cogs',
-        visible: loggedIn,
         action: goToTeamDashboard,
     },
     {
         name: 'Logout',
         icon: 'sign-out-alt',
         action: logout,
-        visible: loggedIn,
     },])
 
 const unloggedMenu = ref([
     {
         name: 'Login',
         icon: 'sign-in-alt',
-        visible: !loggedIn.value,
         action: goToLogin,
     },
     {
         name: 'Sign Up',
         icon: 'user-plus',
-        visible: !loggedIn.value,
         action: goToSignup,
     },])
 const AlwaysMenu = ref([
@@ -98,7 +94,6 @@ watch(loggedIn, (newLoggedIn) => {
 const headerTitle = ref('Guest');
 
 const loading = ref(true);
-//TODO only displays certain elements if user is logged in
 
 
 
