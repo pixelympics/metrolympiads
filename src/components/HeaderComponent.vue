@@ -16,7 +16,7 @@ async function logout() {
         console.error(error);
     }
 
-    router.push('/');
+    router.push({ name: 'home' });
 }
 </script>
 
