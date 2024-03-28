@@ -22,19 +22,25 @@ onMounted(async () => {
 
 <template>
     <HeaderComponent />
-    <table class="table-auto">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Score</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(item, index) in scores" :key="index">
-                <td>{{ item.name }}</td>
-                <td>{{ item.score }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="flex flex-col items-center">
+    <table  class="table-auto">
+            <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th class="px-4 py-2">Team name</th>
+                        <th class="px-4 py-2">Points</th>
+                    </tr>
+                </thead>
+
+
+            <tbody>
+                <tr v-for="(item, index) in scores" :key="index">
+                    <td class="border px-4 py-2">{{ index +1 }}</td>
+                    <td class="border px-4 py-2">{{ item.name }}</td>
+                    <td class="border px-4 py-2">{{ item.score }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 
