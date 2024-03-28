@@ -1,42 +1,15 @@
 <script setup>
-import { Slide } from 'vue3-burger-menu';
 import { useRouter } from 'vue-router';
 import { supabase } from '@/lib/supabase';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import { onMounted, watch } from 'vue';
 import { ref } from 'vue';
-
 const { push: routerPush } = useRouter();
 const { user } = storeToRefs(useUserStore());
 const props = defineProps({ title: String });
-
+const collapsed = ref(true);
 const loggedIn = ref(!!user);
-
-watch(user, async (newUser) => {
-    if (props.title) {
-        return;
-    }
-
-    updateConnectionStatus(newUser);
-});
-
-const headerTitle = ref('Guest');
-
-const loading = ref(false);
-//TODO only displays certain elements if user is logged in
-
-const logout = async function () {
-    loading.value = true;
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-        console.error(error);
-    }
-
-    routerPush('/');
-};
-
 const goToTeamDashboard = function () {
     routerPush('/team-dashboard');
 };
@@ -56,6 +29,85 @@ const goToLogin = function () {
 const goToSignup = function () {
     routerPush('/signup');
 };
+const logout = async function () {
+    loading.value = true;
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+        console.error(error);
+    }
+
+    routerPush('/');
+};
+const loggedInMenu = ref([
+    {
+        name: 'Team settings',
+        icon: 'cogs',
+        visible: loggedIn,
+        action: goToTeamDashboard,
+    },
+    {
+        name: 'Logout',
+        icon: 'sign-out-alt',
+        action: logout,
+        visible: loggedIn,
+    },])
+
+const unloggedMenu = ref([
+    {
+        name: 'Login',
+        icon: 'sign-in-alt',
+        visible: !loggedIn.value,
+        action: goToLogin,
+    },
+    {
+        name: 'Sign Up',
+        icon: 'user-plus',
+        visible: !loggedIn.value,
+        action: goToSignup,
+    },])
+const AlwaysMenu = ref([
+    {
+        name: 'Home',
+        icon: 'home',
+        action: goToTeamDashboard
+    },
+    {
+        name: 'Ranking',
+        icon: 'chart-line',
+        action: goToRanking
+    },
+    {
+        name: 'Matchs',
+        icon: 'futbol',
+        action: goToMatchs,
+    },]);
+
+
+watch(user, async (newUser) => {
+    if (props.title) {
+        return;
+    }
+
+    updateConnectionStatus(newUser);
+});
+
+watch(loggedIn, (newLoggedIn) => {
+    if (newLoggedIn) {
+        menu.value = AlwaysMenu.value.concat(loggedInMenu.value);
+    } else {
+        menu.value = AlwaysMenu.value.concat(unloggedMenu.value);
+    }
+});
+
+const headerTitle = ref('Guest');
+
+const loading = ref(true);
+//TODO only displays certain elements if user is logged in
+
+
+
+
 
 const fetchTeamName = async function fetchTeamName(teamId) {
     const { data, error } = await supabase
@@ -80,6 +132,23 @@ const updateConnectionStatus = async function (newUser) {
         loggedIn.value = false;
     }
 };
+const menu = ref([
+    {
+        name: 'Home',
+        icon: 'home',
+        action: goToTeamDashboard
+    },
+    {
+        name: 'Ranking',
+        icon: 'chart-line',
+        action: goToRanking
+    },
+    {
+        name: 'Matchs',
+        icon: 'futbol',
+        action: goToMatchs,
+    },
+]);
 
 onMounted(async () => {
     await updateConnectionStatus(user.value);
@@ -87,28 +156,24 @@ onMounted(async () => {
 </script>
 
 <template Header>
-    <Slide>
-        <button v-if="loggedIn" @click="goToTeamDashboard">Team settings</button>
-        <button @click="goToRanking">Ranking</button>
-        <button v-if="loggedIn" @click="goToMatchs">Matchs</button>
-
-        <button v-if="!loggedIn" @click="goToLogin">Login</button>
-        <button v-if="!loggedIn" @click="goToSignup">Sign Up</button>
-
-        <button v-if="loggedIn" :loading="loading" @click="logout">
-            <span v-if="loading">...</span>
-            <span v-else>Logout</span>
-        </button>
-    </Slide>
-
+    <VueAwesomeSideBar 
+    v-model:collapsed="collapsed"
+    v-model:menu="menu"
+    v-model:miniMenu="collapsed"
+    closeOnClickOutSide
+    BottomMiniMenuBtn="false"
+    @item-click="( (item) => {
+        if (item.action) {
+            item.action();
+        } 
+    })"
+    
+    />
+    <div class="fixed">
+        <img @click="collapsed=!collapsed" src="@/assets/burger.svg" alt="burger" class="w-20 h-20" />
+    </div>
     <div class="flex justify-center">
         <h1 class="text-3xl m-5">{{ title ? title : headerTitle }}</h1>
     </div>
 </template>
 
-<!--<style>
-.greeting {
-    color: red;
-    font-weight: bold;
-}
-</style>-->
