@@ -161,6 +161,7 @@ onMounted(async () => {
     v-model:menu="menu"
     v-model:miniMenu="collapsed"
     closeOnClickOutSide
+    dark
     BottomMiniMenuBtn="false"
     @item-click="( (item) => {
         if (item.action) {
@@ -176,4 +177,3 @@ onMounted(async () => {
         <h1 class="text-3xl m-5">{{ title ? title : headerTitle }}</h1>
     </div>
 </template>
-
