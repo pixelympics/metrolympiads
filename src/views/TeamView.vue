@@ -12,6 +12,7 @@ const { user } = storeToRefs(useUserStore());
 watch(user, async () => {
     const datas = await getDatasFromLeader(user.value?.id);
     if (datas[0].members !== null && teamMembers.value.length < 5) {
+        datas[0].members = [];
         datas[0].members.forEach((member) => {
             teamMembers.value.push({ id: i, name: member, modelValue: '' });
             i++;
