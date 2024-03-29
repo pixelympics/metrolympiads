@@ -9,7 +9,7 @@ const emit = defineEmits(['submit']);
 </script>
 
 <template>
-    <div class="m-1 h-full bg-background max-w-[300px]">
+    <div class="m-1 h-full bg-white max-w-[300px]">
         <div class="flex justify-center items-center h-full">
             <div class="p-8 rounded-lg shadow-lg">
                 <h1 class="text-2xl justify-center font-bold mb-4">{{ caption }}</h1>
@@ -18,7 +18,7 @@ const emit = defineEmits(['submit']);
                     <div class="mb-4">
                         <button
                             type="submit"
-                            class="w-full bg-indigo-500 text-white font-semibold p-2 rounded-md"
+                            class="w-full bg-primary hover:bg-secondary transition duration-300 text-white font-semibold p-2 rounded-md"
                         >
                             {{ submitButtonText }}
                         </button>

@@ -70,7 +70,10 @@ const onPasswordChange = (value) => {
             You don't have an account yet? Create one now!
         </a>
 
-        <a href="#" class="bg-indigo-500 text-white text-xl font-semibold m-2 mt-4 p-2 rounded-md">
+        <a
+            href="#"
+            class="bg-accent hover:bg-secondary transition duration-300 text-white text-xl font-semibold m-2 mt-4 p-2 rounded-md"
+        >
             Guest access
         </a>
     </div>
