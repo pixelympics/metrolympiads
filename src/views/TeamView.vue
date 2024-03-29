@@ -86,9 +86,8 @@ const deleteMember = (id) => {
 </script>
 
 <template>
-    <Header />
+    <Header title="Manage your team!" />
     <div class="flex flex-col items-center justify-center gap-2">
-        <h1 class="text-3xl m-5">Manage your team!</h1>
         <FormField
             @update:value="teamOnChange"
             id="teamname"
