@@ -7,8 +7,10 @@ import { onMounted, ref, watch } from 'vue';
 import { supabase } from '@/lib/supabase';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
 
 const { user } = storeToRefs(useUserStore());
+const router = useRouter();
 
 const userTeamId = ref('');
 const userTeamName = ref('');
@@ -98,8 +100,7 @@ const onSubmit = async () => {
         return;
     }
 
-    //TODO redirect to matchs list
-    alert('Match created');
+    router.push('/matchs');
 };
 
 onMounted(async () => {

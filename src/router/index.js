@@ -3,10 +3,10 @@ import LoginView from '@/views/LoginView.vue';
 import SignUp from '@/views/SignUp.vue';
 import { supabase } from '@/lib/supabase';
 import TeamView from '@/views/TeamView.vue';
-//import MatchsView from '@/views/MatchsView.vue';
 //import Scoreboard from '@/views/ScoreboardView.vue';
 import CreateMatchView from '@/views/CreateMatchView.vue';
 import Rankings from '@/views/RankingsView.vue';
+import MatchsView from '@/views/MatchsView.vue';
 
 const isLoggedIn = async () => {
     const { data } = await supabase.auth.getSession();
@@ -53,6 +53,12 @@ const router = createRouter({
             path: '/team-dashboard',
             name: 'team-dashboard',
             component: TeamView,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/matchs',
+            name: 'matchs',
+            component: MatchsView,
             meta: { requiresAuth: true }
         },
         {
