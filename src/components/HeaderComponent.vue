@@ -115,9 +115,11 @@ const fetchTeamName = async function fetchTeamName(teamId) {
 
 const updateConnectionStatus = async function (newUser) {
     if (newUser) {
+        menu.value = AlwaysMenu.value.concat(loggedInMenu.value);
         headerTitle.value = 'Team ' + (await fetchTeamName(newUser.id));
         loggedIn.value = true;
     } else {
+        menu.value = AlwaysMenu.value.concat(unloggedMenu.value);
         headerTitle.value = 'Guest';
         loggedIn.value = false;
     }
