@@ -43,37 +43,39 @@ const loggedInMenu = ref([
     {
         name: 'Team settings',
         icon: 'cogs',
-        action: goToTeamDashboard,
+        action: goToTeamDashboard
+    },
+    {
+        name: 'Matchs',
+        icon: 'futbol',
+        action: goToMatchs
     },
     {
         name: 'Logout',
         icon: 'sign-out-alt',
-        action: logout,
-    },])
+        action: logout
+    }
+]);
 
 const unloggedMenu = ref([
     {
         name: 'Login',
         icon: 'sign-in-alt',
-        action: goToLogin,
+        action: goToLogin
     },
     {
         name: 'Sign Up',
         icon: 'user-plus',
-        action: goToSignup,
-    },])
+        action: goToSignup
+    }
+]);
 const AlwaysMenu = ref([
     {
         name: 'Ranking',
         icon: 'chart-line',
         action: goToRanking
-    },
-    {
-        name: 'Matchs',
-        icon: 'futbol',
-        action: goToMatchs,
-    },]);
-
+    }
+]);
 
 watch(user, async (newUser) => {
     if (props.title) {
@@ -94,10 +96,6 @@ watch(loggedIn, (newLoggedIn) => {
 const headerTitle = ref('Guest');
 
 const loading = ref(true);
-
-
-
-
 
 const fetchTeamName = async function fetchTeamName(teamId) {
     const { data, error } = await supabase
@@ -138,8 +136,8 @@ const menu = ref([
     {
         name: 'Matchs',
         icon: 'futbol',
-        action: goToMatchs,
-    },
+        action: goToMatchs
+    }
 ]);
 
 onMounted(async () => {
@@ -148,21 +146,27 @@ onMounted(async () => {
 </script>
 
 <template Header>
-    <VueAwesomeSideBar 
-    v-model:collapsed="collapsed"
-    v-model:menu="menu"
-    v-model:miniMenu="collapsed"
-    closeOnClickOutSide
-    dark
-    @item-click="( (item) => {
-        if (item.action) {
-            item.action();
-        } 
-    })"
-    
+    <VueAwesomeSideBar
+        v-model:collapsed="collapsed"
+        v-model:menu="menu"
+        v-model:miniMenu="collapsed"
+        closeOnClickOutSide
+        dark
+        @item-click="
+            (item) => {
+                if (item.action) {
+                    item.action();
+                }
+            }
+        "
     />
     <div class="fixed">
-        <img @click="collapsed=!collapsed" src="@/assets/burger.svg" alt="burger" class="w-20 h-20" />
+        <img
+            @click="collapsed = !collapsed"
+            src="@/assets/burger.svg"
+            alt="burger"
+            class="w-20 h-20"
+        />
     </div>
     <div class="flex justify-center">
         <h1 class="text-3xl m-5">{{ title ? title : headerTitle }}</h1>
